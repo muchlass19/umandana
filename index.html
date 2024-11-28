@@ -67,25 +67,25 @@
         },
       ];
       const main = () => {
-        const rules = document.getElementById('rules')
-        const ul = document.createElement('ul')
-        
-        for(let i = 0; i < vowels.length; i++) {
-          const li = document.createElement('li')
-          li.innerHTML = `<b>${vowels[i].original}</b>: ${vowels[i].rule}`
-          ul.appendChild(li)
+        const rules = document.getElementById("rules");
+        const ul = document.createElement("ul");
+
+        for (let i = 0; i < vowels.length; i++) {
+          const li = document.createElement("li");
+          li.innerHTML = `<b>${vowels[i].original}</b>: ${vowels[i].rule}`;
+          ul.appendChild(li);
         }
 
-        const liConsonant = document.createElement('li')
-        liConsonant.innerHTML = '<b>Konsonan</b>: es'
+        const liConsonant = document.createElement("li");
+        liConsonant.innerHTML = "<b>Konsonan</b>: es";
 
-        const liNg = document.createElement('li')
-        liNg.innerHTML = '<b>NG</b>: Strengen'
+        const liNg = document.createElement("li");
+        liNg.innerHTML = "<b>NG</b>: Strengen";
 
-        ul.appendChild(liConsonant)
-        ul.appendChild(liNg)
-        rules.appendChild(ul)
-      }
+        ul.appendChild(liConsonant);
+        ul.appendChild(liNg);
+        rules.appendChild(ul);
+      };
       const finder = (arr, word) => {
         return arr.find((el) => el.original === word);
       };
@@ -95,10 +95,28 @@
 
         for (let i = 0; i < input.length; i++) {
           const char = input[i];
-          if (char == "N" && input[i + 1] === "G") {
+          if (
+            char == "N" &&
+            input[i + 1] === "G" &&
+            finder(vowels, input[i + 2])
+          ) {
+            result.push("Ng" + finder(vowels, input[i + 2]).rule.toLowerCase());
+            i = i + 2;
+          } else if (
+            char == "N" &&
+            input[i + 1] === "Y" &&
+            finder(vowels, input[i + 2])
+          ) {
+            result.push("Ny" + finder(vowels, input[i + 2]).rule.toLowerCase());
+            i = i + 2;
+          } else if (char == "N" && input[i + 1] === "G") {
             result.push("Strengen");
             i++;
-          } else if (!finder(vowels, char) && finder(vowels, input[i + 1])) {
+          } else if (
+            char != " " &&
+            !finder(vowels, char) &&
+            finder(vowels, input[i + 1])
+          ) {
             let word = char + finder(vowels, input[i + 1]).rule.toLowerCase();
             result.push(word);
             i++;
@@ -115,7 +133,7 @@
         document.getElementById("outputText").innerText = result.join(" ");
       };
 
-      main()
+      main();
     </script>
   </body>
 </html>
