@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Umandana Language</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 400px;
+        margin: auto;
+      }
+      input,
+      button {
+        margin-top: 10px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .output {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+      }
+      #rules ul {
+        list-style-type: none;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Umandana Language</h1>
+    <input
+      type="text"
+      id="inputText"
+      placeholder="Input some words in Indonesian"
+    />
+    <button onclick="langTranslate()">Process</button>
+    <div class="output" id="outputText">Output will be here...</div>
+    <div class="rules" id="rules"></div>
+
+    <script>
+      const vowels = [
+        {
+          original: "A",
+          rule: "Aiden",
+        },
+        {
+          original: "I",
+          rule: "Ipri",
+        },
+        {
+          original: "U",
+          rule: "Upru",
+        },
+        {
+          original: "E",
+          rule: "Epre",
+        },
+        {
+          original: "O",
+          rule: "Opro",
+        },
+      ];
+      const main = () => {
+        const rules = document.getElementById('rules')
+        const ul = document.createElement('ul')
+        
+        for(let i = 0; i < vowels.length; i++) {
+          const li = document.createElement('li')
+          li.innerHTML = `<b>${vowels[i].original}</b>: ${vowels[i].rule}`
+          ul.appendChild(li)
+        }
+
+        const liConsonant = document.createElement('li')
+        liConsonant.innerHTML = '<b>Konsonan</b>: es'
+
+        const liNg = document.createElement('li')
+        liNg.innerHTML = '<b>NG</b>: Strengen'
+
+        ul.appendChild(liConsonant)
+        ul.appendChild(liNg)
+        rules.appendChild(ul)
+      }
+      const finder = (arr, word) => {
+        return arr.find((el) => el.original === word);
+      };
+      const langTranslate = () => {
+        const input = document.getElementById("inputText").value.toUpperCase();
+        const result = [];
+
+        for (let i = 0; i < input.length; i++) {
+          const char = input[i];
+          if (char == "N" && input[i + 1] === "G") {
+            result.push("Strengen");
+            i++;
+          } else if (!finder(vowels, char) && finder(vowels, input[i + 1])) {
+            let word = char + finder(vowels, input[i + 1]).rule.toLowerCase();
+            result.push(word);
+            i++;
+          } else if (finder(vowels, char)) {
+            result.push(finder(vowels, char).rule);
+          } else if (char === " ") {
+            result.push("|");
+          } else {
+            result.push(char + "es");
+          }
+        }
+
+        // Tampilkan hasil
+        document.getElementById("outputText").innerText = result.join(" ");
+      };
+
+      main()
+    </script>
+  </body>
+</html>
